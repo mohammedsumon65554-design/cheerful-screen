@@ -39,6 +39,8 @@ export type Database = {
           detail: Json
           id: number
           ip: string | null
+          new_value: Json | null
+          old_value: Json | null
         }
         Insert: {
           action: string
@@ -46,6 +48,8 @@ export type Database = {
           detail?: Json
           id?: number
           ip?: string | null
+          new_value?: Json | null
+          old_value?: Json | null
         }
         Update: {
           action?: string
@@ -53,6 +57,8 @@ export type Database = {
           detail?: Json
           id?: number
           ip?: string | null
+          new_value?: Json | null
+          old_value?: Json | null
         }
         Relationships: []
       }
@@ -210,6 +216,39 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          read_at: string | null
+          shown_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          read_at?: string | null
+          shown_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          read_at?: string | null
+          shown_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           admin_note: string | null
@@ -362,44 +401,74 @@ export type Database = {
       profiles: {
         Row: {
           accepted_terms_at: string | null
+          api_enabled: boolean
+          api_key_created_at: string | null
+          api_key_hash: string | null
           avatar_url: string | null
           balance: number
+          ban_reason: string | null
           banned: boolean
           created_at: string
           deleted_at: string | null
           email: string | null
           full_name: string
           id: string
+          language: string
+          last_seen_at: string | null
+          last_sign_in_at: string | null
+          password_changed_at: string | null
           phone: string | null
           public_id: string
+          sessions_revoked_at: string | null
+          sign_in_method: string | null
           username: string
         }
         Insert: {
           accepted_terms_at?: string | null
+          api_enabled?: boolean
+          api_key_created_at?: string | null
+          api_key_hash?: string | null
           avatar_url?: string | null
           balance?: number
+          ban_reason?: string | null
           banned?: boolean
           created_at?: string
           deleted_at?: string | null
           email?: string | null
           full_name?: string
           id: string
+          language?: string
+          last_seen_at?: string | null
+          last_sign_in_at?: string | null
+          password_changed_at?: string | null
           phone?: string | null
           public_id: string
+          sessions_revoked_at?: string | null
+          sign_in_method?: string | null
           username: string
         }
         Update: {
           accepted_terms_at?: string | null
+          api_enabled?: boolean
+          api_key_created_at?: string | null
+          api_key_hash?: string | null
           avatar_url?: string | null
           balance?: number
+          ban_reason?: string | null
           banned?: boolean
           created_at?: string
           deleted_at?: string | null
           email?: string | null
           full_name?: string
           id?: string
+          language?: string
+          last_seen_at?: string | null
+          last_sign_in_at?: string | null
+          password_changed_at?: string | null
           phone?: string | null
           public_id?: string
+          sessions_revoked_at?: string | null
+          sign_in_method?: string | null
           username?: string
         }
         Relationships: []
@@ -462,6 +531,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sign_ins: {
+        Row: {
+          created_at: string
+          device: string | null
+          id: number
+          ip: string | null
+          method: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device?: string | null
+          id?: number
+          ip?: string | null
+          method?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device?: string | null
+          id?: number
+          ip?: string | null
+          method?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       site_settings: {
         Row: {
@@ -561,6 +657,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_adjust_balance: {
+        Args: { _amount: number; _note: string; _user: string }
+        Returns: number
+      }
       cancel_my_order: { Args: { _order_id: string }; Returns: undefined }
       create_deposit: {
         Args: {
@@ -578,6 +678,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      mark_my_notifications: {
+        Args: { _ids: string[]; _shown: boolean }
+        Returns: undefined
       }
       place_order: {
         Args: {

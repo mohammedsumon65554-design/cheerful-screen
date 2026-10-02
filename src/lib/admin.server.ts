@@ -41,9 +41,12 @@ async function admin() {
   return supabaseAdmin;
 }
 
-export async function logAdmin(action: string, detail: Record<string, unknown> = {}) {
+export async function logAdmin(action: string, detail: Record<string, unknown> = {}, oldValue?: unknown, newValue?: unknown) {
   const db = await admin();
-  await db.from("admin_log").insert({ action, detail: detail as never, ip: clientIp() });
+  await db.from("admin_log").insert({
+    action, detail: detail as never, ip: clientIp(),
+    old_value: (oldValue ?? null) as never, new_value: (newValue ?? null) as never,
+  });
 }
 
 /** Normal admin password: DB hash, seeded from the ADMIN_PASSWORD secret on first use. */

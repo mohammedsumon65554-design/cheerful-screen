@@ -13,6 +13,7 @@ import { SupportAdminButton } from "@/components/SupportAdmin";
 import { Avatar } from "@/components/Avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
+import { UserInbox } from "@/components/UserInbox";
 import { PlatformIcon, TelegramIcon, WhatsAppIcon } from "@/lib/brand";
 import { toast } from "sonner";
 
@@ -136,9 +137,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Link to={user ? "/balance" : "/sign-in"} className="btn-ghost-glow !px-3 !py-1.5 text-sm">
               <Wallet className="h-4 w-4 text-primary" /> {money(profile?.balance ?? 0)}
             </Link>
-            <button aria-label="Notifications" className="rounded-full p-2 hover:bg-accent" onClick={() => toast("No new notifications")}>
-              <Bell className="h-5 w-5" />
-            </button>
+            <UserInbox />
             <button aria-label="Toggle theme" onClick={toggle} className="rounded-full p-2 hover:bg-accent">
               {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
@@ -156,7 +155,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <main className="mx-auto max-w-5xl px-4 pt-6">{children}</main>
+      <main className={`mx-auto px-4 pt-6 ${path.startsWith("/admin") ? "max-w-7xl" : "max-w-5xl"}`}>{children}</main>
 
       <footer className="mx-auto mt-16 max-w-5xl px-4 pb-6">
         <div className="glass rounded-3xl p-6">
