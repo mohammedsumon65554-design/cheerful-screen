@@ -13,6 +13,7 @@ import { SupportAdminButton } from "@/components/SupportAdmin";
 import { Avatar } from "@/components/Avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
+import { UserInbox } from "@/components/UserInbox";
 import { PlatformIcon, TelegramIcon, WhatsAppIcon } from "@/lib/brand";
 import { toast } from "sonner";
 

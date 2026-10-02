@@ -48,8 +48,8 @@ export function PasswordDialog({ id, name, onClose, onDone }: Base) {
   const [busy, setBusy] = useState(false);
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pw.length < 8) return toast.error("Password must be at least 8 characters");
-    if (pw !== confirm2) return toast.error("Passwords do not match");
+    if (pw.length < 8) return void toast.error("Password must be at least 8 characters");
+    if (pw !== confirm2) return void toast.error("Passwords do not match");
     run(fn({ data: { id, password: pw, signOut } }), "Password changed", onDone, setBusy);
   };
   return (
@@ -90,9 +90,9 @@ export function BalanceDialog({ id, name, balance, onClose, onDone }: Base & { b
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const a = Number(amount);
-    if (!(a > 0)) return toast.error("Enter an amount above 0");
-    if (note.trim().length < 2) return toast.error("A note is required");
-    if (direction === "subtract" && a > balance) return toast.error("Balance cannot go below zero");
+    if (!(a > 0)) return void toast.error("Enter an amount above 0");
+    if (note.trim().length < 2) return void toast.error("A note is required");
+    if (direction === "subtract" && a > balance) return void toast.error("Balance cannot go below zero");
     run(fn({ data: { id, amount: a, direction, note } }), direction === "add" ? "Balance added" : "Balance subtracted", onDone, setBusy);
   };
   return (
@@ -123,7 +123,7 @@ export function MessageDialog({ id, name, onClose, onDone, kind: initial = "popu
   const [busy, setBusy] = useState(false);
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return toast.error("Title is required");
+    if (!title.trim()) return void toast.error("Title is required");
     run(fn({ data: { id, kind, title, body } }), kind === "popup" ? "Popup sent" : "Notification sent", onDone, setBusy);
   };
   return (

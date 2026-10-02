@@ -144,8 +144,8 @@ function EditProfile({ id, p, onClose, onDone }: { id: string; p: { full_name: s
   const close = () => { if (dirty && !confirm("Discard unsaved changes?")) return; onClose(); };
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!f.full_name.trim()) return toast.error("Name is required");
-    if (!/^\S+@\S+\.\S+$/.test(f.email)) return toast.error("Enter a valid email");
+    if (!f.full_name.trim()) return void toast.error("Name is required");
+    if (!/^\S+@\S+\.\S+$/.test(f.email)) return void toast.error("Enter a valid email");
     setBusy(true);
     try { const r = await fn({ data: { id, ...f } }); if (!r.ok) toast.error(r.error); else { toast.success("Profile saved"); onDone(); } }
     catch { toast.error("Something went wrong"); } finally { setBusy(false); }

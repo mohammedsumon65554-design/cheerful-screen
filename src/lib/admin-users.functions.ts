@@ -120,7 +120,7 @@ export const adminGetUser = createServerFn({ method: "POST" })
     const { data: p } = await db.from("profiles").select("*").eq("id", data.id).maybeSingle();
     if (!p) throw new Error("NOT_FOUND");
     const { data: au } = await db.auth.admin.getUserById(data.id);
-    const u = au?.user;
+    const u = au?.user ?? undefined;
     const [deps, ords, ledger, signIns, notes] = await Promise.all([
       db.from("deposits").select("*").eq("user_id", data.id).order("created_at", { ascending: false }).limit(200),
       db.from("orders").select("*").eq("user_id", data.id).order("created_at", { ascending: false }).limit(200),
