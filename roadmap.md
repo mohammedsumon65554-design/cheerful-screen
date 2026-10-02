@@ -5,7 +5,7 @@
 ## Fix & Update request (Oct 2026)
 - [x] Support Admin: 1 tap Telegram / 6 taps admin login (shared provider)
 - [x] Admin login server-side (master + changeable password, lockout, admin_log, httpOnly session)
-- [ ] Waiting on user: ADMIN_MASTER_PASSWORD and ADMIN_PASSWORD secrets
+- [x] ADMIN_MASTER_PASSWORD and ADMIN_PASSWORD secrets saved
 - [x] WhatsApp/Telegram links use separate settings, digits-only wa.me, hidden when empty
 - [x] Payment logos: uploaded-image support + coloured badge fallback
 - [ ] Waiting on user: official bKash/Nagad/Rocket/Binance/USDT logo files (upload to logos bucket)
