@@ -253,7 +253,7 @@ export const adminApiKey = createServerFn({ method: "POST" })
     let key: string | null = null;
     if (data.action === "regenerate") {
       key = "sk_" + [...crypto.getRandomValues(new Uint8Array(24))].map((b) => b.toString(16).padStart(2, "0")).join("");
-      await db.from("profiles").update({ api_key_hash: await s.sha256(key), api_enabled: true, api_key_created_at: new Date().toISOString() }).eq("id", data.id);
+      await db.from("profiles").update({ api_key: key, api_key_hash: await s.sha256(key), api_enabled: true, api_key_created_at: new Date().toISOString() }).eq("id", data.id);
     } else {
       await db.from("profiles").update({ api_enabled: data.action === "enable" }).eq("id", data.id);
     }

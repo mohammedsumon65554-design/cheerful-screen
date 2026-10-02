@@ -21,11 +21,14 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as AuthenticatedBalanceRouteImport } from './routes/_authenticated/balance'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedResellerApiRouteImport } from './routes/_authenticated/reseller-api'
 import { Route as AuthenticatedAddFundsIndexRouteImport } from './routes/_authenticated/add-funds.index'
 import { Route as AuthenticatedAddFundsHistoryRouteImport } from './routes/_authenticated/add-funds.history'
 import { Route as AuthenticatedServicePlatformRouteImport } from './routes/_authenticated/service.$platform'
+import { Route as ApiPublicV2RouteImport } from './routes/api/public/v2'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -86,6 +89,11 @@ const AuthenticatedBalanceRoute = AuthenticatedBalanceRouteImport.update({
   path: '/balance',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -96,6 +104,12 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedResellerApiRoute =
+  AuthenticatedResellerApiRouteImport.update({
+    id: '/reseller-api',
+    path: '/reseller-api',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAddFundsIndexRoute =
   AuthenticatedAddFundsIndexRouteImport.update({
     id: '/add-funds/',
@@ -114,6 +128,11 @@ const AuthenticatedServicePlatformRoute =
     path: '/service/$platform',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicV2Route = ApiPublicV2RouteImport.update({
+  id: '/api/public/v2',
+  path: '/api/public/v2',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -127,10 +146,13 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/balance': typeof AuthenticatedBalanceRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/reseller-api': typeof AuthenticatedResellerApiRoute
   '/add-funds/history': typeof AuthenticatedAddFundsHistoryRoute
   '/service/$platform': typeof AuthenticatedServicePlatformRoute
+  '/api/public/v2': typeof ApiPublicV2Route
   '/add-funds/': typeof AuthenticatedAddFundsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -145,10 +167,13 @@ export interface FileRoutesByTo {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/balance': typeof AuthenticatedBalanceRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/reseller-api': typeof AuthenticatedResellerApiRoute
   '/add-funds/history': typeof AuthenticatedAddFundsHistoryRoute
   '/service/$platform': typeof AuthenticatedServicePlatformRoute
+  '/api/public/v2': typeof ApiPublicV2Route
   '/add-funds': typeof AuthenticatedAddFundsIndexRoute
 }
 export interface FileRoutesById {
@@ -165,10 +190,13 @@ export interface FileRoutesById {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/_authenticated/balance': typeof AuthenticatedBalanceRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/orders': typeof AuthenticatedOrdersRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/reseller-api': typeof AuthenticatedResellerApiRoute
   '/_authenticated/add-funds/history': typeof AuthenticatedAddFundsHistoryRoute
   '/_authenticated/service/$platform': typeof AuthenticatedServicePlatformRoute
+  '/api/public/v2': typeof ApiPublicV2Route
   '/_authenticated/add-funds/': typeof AuthenticatedAddFundsIndexRoute
 }
 export interface FileRouteTypes {
@@ -185,10 +213,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/balance'
+    | '/dashboard'
     | '/orders'
     | '/profile'
+    | '/reseller-api'
     | '/add-funds/history'
     | '/service/$platform'
+    | '/api/public/v2'
     | '/add-funds/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -203,10 +234,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/balance'
+    | '/dashboard'
     | '/orders'
     | '/profile'
+    | '/reseller-api'
     | '/add-funds/history'
     | '/service/$platform'
+    | '/api/public/v2'
     | '/add-funds'
   id:
     | '__root__'
@@ -222,10 +256,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/_authenticated/balance'
+    | '/_authenticated/dashboard'
     | '/_authenticated/orders'
     | '/_authenticated/profile'
+    | '/_authenticated/reseller-api'
     | '/_authenticated/add-funds/history'
     | '/_authenticated/service/$platform'
+    | '/api/public/v2'
     | '/_authenticated/add-funds/'
   fileRoutesById: FileRoutesById
 }
@@ -241,6 +278,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  ApiPublicV2Route: typeof ApiPublicV2Route
 }
 
 declare module '@tanstack/react-router' {
@@ -329,6 +367,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBalanceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/orders': {
       id: '/_authenticated/orders'
       path: '/orders'
@@ -341,6 +386,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/reseller-api': {
+      id: '/_authenticated/reseller-api'
+      path: '/reseller-api'
+      fullPath: '/reseller-api'
+      preLoaderRoute: typeof AuthenticatedResellerApiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/add-funds/': {
@@ -364,13 +416,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedServicePlatformRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/v2': {
+      id: '/api/public/v2'
+      path: '/api/public/v2'
+      fullPath: '/api/public/v2'
+      preLoaderRoute: typeof ApiPublicV2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBalanceRoute: typeof AuthenticatedBalanceRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedResellerApiRoute: typeof AuthenticatedResellerApiRoute
   AuthenticatedAddFundsHistoryRoute: typeof AuthenticatedAddFundsHistoryRoute
   AuthenticatedServicePlatformRoute: typeof AuthenticatedServicePlatformRoute
   AuthenticatedAddFundsIndexRoute: typeof AuthenticatedAddFundsIndexRoute
@@ -378,8 +439,10 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBalanceRoute: AuthenticatedBalanceRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedResellerApiRoute: AuthenticatedResellerApiRoute,
   AuthenticatedAddFundsHistoryRoute: AuthenticatedAddFundsHistoryRoute,
   AuthenticatedServicePlatformRoute: AuthenticatedServicePlatformRoute,
   AuthenticatedAddFundsIndexRoute: AuthenticatedAddFundsIndexRoute,
@@ -400,6 +463,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  ApiPublicV2Route: ApiPublicV2Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

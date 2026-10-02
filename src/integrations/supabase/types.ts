@@ -113,6 +113,30 @@ export type Database = {
         }
         Relationships: []
       }
+      api_requests: {
+        Row: {
+          action: string
+          created_at: string
+          id: number
+          ip: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: number
+          ip?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: number
+          ip?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           active: boolean
@@ -267,6 +291,7 @@ export type Database = {
           refunded: number
           service_id: string
           service_name: string
+          source: string
           status: Database["public"]["Enums"]["order_status"]
           updated_at: string
           user_id: string
@@ -288,6 +313,7 @@ export type Database = {
           refunded?: number
           service_id: string
           service_name: string
+          source?: string
           status?: Database["public"]["Enums"]["order_status"]
           updated_at?: string
           user_id: string
@@ -309,6 +335,7 @@ export type Database = {
           refunded?: number
           service_id?: string
           service_name?: string
+          source?: string
           status?: Database["public"]["Enums"]["order_status"]
           updated_at?: string
           user_id?: string
@@ -402,6 +429,7 @@ export type Database = {
         Row: {
           accepted_terms_at: string | null
           api_enabled: boolean
+          api_key: string | null
           api_key_created_at: string | null
           api_key_hash: string | null
           avatar_url: string | null
@@ -426,6 +454,7 @@ export type Database = {
         Insert: {
           accepted_terms_at?: string | null
           api_enabled?: boolean
+          api_key?: string | null
           api_key_created_at?: string | null
           api_key_hash?: string | null
           avatar_url?: string | null
@@ -450,6 +479,7 @@ export type Database = {
         Update: {
           accepted_terms_at?: string | null
           api_enabled?: boolean
+          api_key?: string | null
           api_key_created_at?: string | null
           api_key_hash?: string | null
           avatar_url?: string | null
@@ -564,11 +594,14 @@ export type Database = {
           allow_orders: boolean
           announcement_on: boolean
           announcement_text: string | null
+          api_policy: string
+          api_rate_per_min: number
           bdt_rate: number
           email: string | null
           hero_text: string
           hero_title: string
           id: number
+          music_enabled: boolean
           require_verified_email: boolean
           site_name: string
           telegram: string | null
@@ -578,11 +611,14 @@ export type Database = {
           allow_orders?: boolean
           announcement_on?: boolean
           announcement_text?: string | null
+          api_policy?: string
+          api_rate_per_min?: number
           bdt_rate?: number
           email?: string | null
           hero_text?: string
           hero_title?: string
           id?: number
+          music_enabled?: boolean
           require_verified_email?: boolean
           site_name?: string
           telegram?: string | null
@@ -592,15 +628,57 @@ export type Database = {
           allow_orders?: boolean
           announcement_on?: boolean
           announcement_text?: string | null
+          api_policy?: string
+          api_rate_per_min?: number
           bdt_rate?: number
           email?: string | null
           hero_text?: string
           hero_title?: string
           id?: number
+          music_enabled?: boolean
           require_verified_email?: boolean
           site_name?: string
           telegram?: string | null
           whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      songs: {
+        Row: {
+          active: boolean
+          artist: string
+          cover_path: string | null
+          created_at: string
+          deleted_at: string | null
+          file_path: string
+          id: string
+          is_welcome: boolean
+          sort: number
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          artist?: string
+          cover_path?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          file_path: string
+          id?: string
+          is_welcome?: boolean
+          sort?: number
+          title: string
+        }
+        Update: {
+          active?: boolean
+          artist?: string
+          cover_path?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          file_path?: string
+          id?: string
+          is_welcome?: boolean
+          sort?: number
+          title?: string
         }
         Relationships: []
       }
@@ -661,6 +739,15 @@ export type Database = {
         Args: { _amount: number; _note: string; _user: string }
         Returns: number
       }
+      api_place_order: {
+        Args: {
+          _link: string
+          _quantity: number
+          _service_id: string
+          _uid: string
+        }
+        Returns: Json
+      }
       cancel_my_order: { Args: { _order_id: string }; Returns: undefined }
       create_deposit: {
         Args: {
@@ -672,6 +759,7 @@ export type Database = {
         }
         Returns: Json
       }
+      ensure_my_api_key: { Args: { _regenerate?: boolean }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

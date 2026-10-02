@@ -3,7 +3,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Home, User, Wallet, ShoppingCart, History, PlusCircle, ReceiptText, ShieldCheck, HelpCircle, Info,
-  LogOut, Sun, Moon, Bell, X, Mail, Sparkles,
+  LogOut, Sun, Moon, Bell, X, Mail, Sparkles, Code2, LayoutDashboard, Languages, Music, Check,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useAuth } from "@/lib/auth";
@@ -16,6 +16,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { UserInbox } from "@/components/UserInbox";
 import { PlatformIcon, TelegramIcon, WhatsAppIcon } from "@/lib/brand";
 import { toast } from "sonner";
+import { MusicProvider, useMusic } from "@/components/MusicPlayer";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 function useTheme() {
   const [dark, setDark] = useState(false);
@@ -68,6 +70,11 @@ const MENU = [
   { to: "/orders", label: "Order History", icon: History },
   { to: "/add-funds", label: "Add Funds", icon: PlusCircle },
   { to: "/add-funds/history", label: "Add Funds History", icon: ReceiptText },
+  { to: "/reseller-api", label: "API", icon: Code2 },
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+] as const;
+
+const MENU_AFTER = [
   { to: "/policy", label: "Policy", icon: ShieldCheck },
   { to: "/qna", label: "QnA", icon: HelpCircle },
   { to: "/about", label: "About Us", icon: Info },
@@ -82,6 +89,16 @@ const BOTTOM = [
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
+  return <MusicProvider><Shell>{children}</Shell></MusicProvider>;
+}
+
+const LANGS = [{ code: "en", label: "English", ready: true }, { code: "bn", label: "বাংলা (Bangla)", ready: false }];
+
+function Shell({ children }: { children: ReactNode }) {
+  const music = useMusic();
+  const [langOpen, setLangOpen] = useState(false);
+  const [lang, setLang] = useState("en");
+  useEffect(() => { setLang(localStorage.getItem("lang") ?? "en"); }, []);
   const { dark, toggle } = useTheme();
   const { user, profile, verified } = useAuth();
   const { data: settings } = useQuery(settingsQuery);
@@ -225,6 +242,17 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <m.icon className="h-5 w-5 text-primary" /> {m.label}
               </Link>
             ))}
+            <button onClick={() => { setMenuOpen(false); setLangOpen(true); }} className="label-premium flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-accent text-left">
+              <Languages className="h-5 w-5 text-primary" /> Language
+            </button>
+            <button onClick={() => { setMenuOpen(false); music.toggleOpen(); }} className="label-premium flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-accent text-left">
+              <Music className="h-5 w-5 text-primary" /> Music
+            </button>
+            {MENU_AFTER.map((m) => (
+              <Link key={m.to} to={m.to} onClick={() => setMenuOpen(false)} className="label-premium flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-accent">
+                <m.icon className="h-5 w-5 text-primary" /> {m.label}
+              </Link>
+            ))}
             {tg && (
               <SupportAdminButton className="label-premium flex items-center gap-3 rounded-xl px-3 py-2.5 text-left hover:bg-accent">
                 <TelegramIcon className="h-5 w-5" /> Support Admin
@@ -238,6 +266,20 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </SheetContent>
       </Sheet>
+
+      <Dialog open={langOpen} onOpenChange={setLangOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogTitle className="text-gradient">Language</DialogTitle>
+          <div className="space-y-2">
+            {LANGS.map((l) => (
+              <button key={l.code} disabled={!l.ready} onClick={() => { localStorage.setItem("lang", l.code); setLang(l.code); setLangOpen(false); toast.success(`Language: ${l.label}`); }}
+                className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left ${lang === l.code ? "border-primary bg-primary/10" : "border-border"} disabled:opacity-50`}>
+                <span>{l.label}</span>{lang === l.code ? <Check className="h-4 w-4 text-primary" /> : !l.ready && <span className="text-xs">Coming soon</span>}
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
