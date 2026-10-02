@@ -154,7 +154,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <main className="mx-auto max-w-5xl px-4 pt-6">{children}</main>
+      <main className={`mx-auto px-4 pt-6 ${path.startsWith("/admin") ? "max-w-7xl" : "max-w-5xl"}`}>{children}</main>
 
       <footer className="mx-auto mt-16 max-w-5xl px-4 pb-6">
         <div className="glass rounded-3xl p-6">
