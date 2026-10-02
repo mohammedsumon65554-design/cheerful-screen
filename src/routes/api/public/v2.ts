@@ -34,17 +34,17 @@ async function readParams(request: Request): Promise<Record<string, string>> {
 
 async function handle(request: Request) {
   const p = await readParams(request);
-  const key = z.string().min(10).max(200).safeParse(p.key);
+  const key = z.string().min(10).max(200).safeParse(p["key"]);
   if (!key.success) return json({ error: "Invalid API key" }, 401);
-  const action = String(p.action ?? "").toLowerCase();
+  const action = String(p["action"] ?? "").toLowerCase();
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
   const { sha256, clientIp } = await import("@/lib/admin.server");
 
   const { data: prof } = await db.from("profiles").select("id,balance,api_enabled,banned,deleted_at")
     .eq("api_key_hash", await sha256(key.data)).maybeSingle();
   if (!prof) return json({ error: "Invalid API key" }, 401);
-  if (!prof.api_enabled) return json({ error: ERR.API_DISABLED[0] }, 403);
-  if (prof.banned || prof.deleted_at) return json({ error: ERR.ACCOUNT_SUSPENDED[0] }, 403);
+  if (!prof.api_enabled) return json({ error: "API access is disabled for this account." }, 403);
+  if (prof.banned || prof.deleted_at) return json({ error: "Account is suspended." }, 403);
 
   const { data: set } = await db.from("site_settings").select("api_rate_per_min").eq("id", 1).maybeSingle();
   const limit = set?.api_rate_per_min ?? 60;
@@ -73,7 +73,7 @@ async function handle(request: Request) {
       const { data, error } = await db.rpc("api_place_order", { _uid: prof.id, _service_id: v.data.service, _link: v.data.link.trim(), _quantity: v.data.quantity });
       if (error) {
         const code = Object.keys(ERR).find((k) => error.message.includes(k));
-        if (code) return json({ error: ERR[code][0] }, ERR[code][1]);
+        const e = code ? ERR[code] : undefined; if (e) return json({ error: e[0] }, e[1]);
         console.error("api add failed", error.message);
         return json({ error: "Could not place order" }, 500);
       }
@@ -81,7 +81,7 @@ async function handle(request: Request) {
       return json({ order: r.order, charge: Number(r.charge).toFixed(2), balance: Number(r.balance).toFixed(2), status: "pending" });
     }
     case "status": {
-      const ids = String(p.orders ?? p.order ?? "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, 100);
+      const ids = String(p["orders"] ?? p["order"] ?? "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, 100);
       if (!ids.length) return json({ error: "Missing parameter: order" }, 400);
       const { data } = await db.from("orders").select("order_code,status,quantity,delivered_qty,charge,refunded,created_at")
         .eq("user_id", prof.id).in("order_code", ids);
@@ -90,7 +90,7 @@ async function handle(request: Request) {
         return { order: o.order_code, status: o.status, quantity: o.quantity, delivered, remains: Math.max(0, o.quantity - delivered),
           charge: Number(o.charge).toFixed(2), refunded: Number(o.refunded).toFixed(2), created_at: o.created_at };
       };
-      if (ids.length === 1 && !p.orders) {
+      if (ids.length === 1 && !p["orders"]) {
         const o = data?.[0];
         return o ? json(fmt(o)) : json({ error: "Order not found" }, 404);
       }
