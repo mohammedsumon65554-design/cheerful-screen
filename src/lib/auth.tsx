@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { recordActivity } from "@/lib/activity.functions";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Profile = Tables<"profiles">;
@@ -48,6 +49,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
+
+  // Sign-in tracking + "online now" heartbeat
+  useEffect(() => {
+    if (!user) return;
+    const key = `signin_rec_${user.id}`;
+    const device = navigator.userAgent.slice(0, 300);
+    const full = sessionStorage.getItem(key) !== "1";
+    sessionStorage.setItem(key, "1");
+    recordActivity({ data: { full, device } }).catch(() => {});
+    const t = setInterval(() => recordActivity({ data: { full: false, device } }).catch(() => {}), 180_000);
+    return () => clearInterval(t);
+  }, [user?.id]);
+
+  // Support may sign a user out of all devices
+  useEffect(() => {
+    const revoked = profile?.sessions_revoked_at;
+    const signedIn = user?.last_sign_in_at;
+    if (revoked && signedIn && new Date(revoked) > new Date(signedIn)) {
+      supabase.auth.signOut().then(() => { window.location.href = "/sign-in"; });
+    }
+  }, [profile?.sessions_revoked_at, user?.last_sign_in_at]);
 
   return (
     <AuthCtx.Provider value={{ ready, session, user, profile, verified: !!user?.email_confirmed_at, refreshProfile }}>
