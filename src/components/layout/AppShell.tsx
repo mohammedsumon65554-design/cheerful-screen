@@ -136,9 +136,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Link to={user ? "/balance" : "/sign-in"} className="btn-ghost-glow !px-3 !py-1.5 text-sm">
               <Wallet className="h-4 w-4 text-primary" /> {money(profile?.balance ?? 0)}
             </Link>
-            <button aria-label="Notifications" className="rounded-full p-2 hover:bg-accent" onClick={() => toast("No new notifications")}>
-              <Bell className="h-5 w-5" />
-            </button>
+            <UserInbox />
             <button aria-label="Toggle theme" onClick={toggle} className="rounded-full p-2 hover:bg-accent">
               {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
