@@ -103,8 +103,8 @@ export function AdminUsers({ initialQ, onOpen }: { initialQ: string; onOpen: (id
                     <td className="max-w-40 truncate px-3 py-2 font-medium">{u.full_name}</td>
                     <td className="max-w-48 truncate px-3 py-2">{u.email ?? "—"}</td>
                     <td className="whitespace-nowrap px-3 py-2">{u.phone ?? "—"}</td>
-                    <td className="px-3 py-2"><Copyable value={u.public_id} /></td>
-                    <td className="px-3 py-2"><Copyable value={u.username} /></td>
+                    <td className="whitespace-nowrap px-3 py-2"><Copyable value={u.public_id} className="[&_span]:break-normal" /></td>
+                    <td className="whitespace-nowrap px-3 py-2"><Copyable value={u.username} className="[&_span]:break-normal" /></td>
                     <td className="whitespace-nowrap px-3 py-2 font-semibold">{money(u.balance)}</td>
                     <td className="whitespace-nowrap px-3 py-2">{fmtDate(u.created_at)}</td>
                     <td className="whitespace-nowrap px-3 py-2">{u.last_sign_in_at ? fmtDate(u.last_sign_in_at) : "—"}</td>

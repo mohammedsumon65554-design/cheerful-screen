@@ -12,6 +12,8 @@
 - [x] Profile photo upload/remove; shown in menu header
 - [x] Premium 3-dot button, bottom sheet on mobile, closes on route change
 - [x] Starter catalog seeded as inactive drafts
-- [ ] Admin panel sections A–F (settings, users, add funds approvals, services + bulk/CSV, orders, API orders)
+- [x] Admin sidebar (20 sections) + Dashboard + Users (search, filters, list, detail, password, balance, popup/notification, edit, ban, verify, API key, CSV) + sign-in tracking + user bell/popups
+- [ ] Waiting on user: rest of the admin task file (it was cut off after the Users section)
+- [ ] Admin: Orders, Add Funds, Services, API, Music, Content, Menu, Home, Support, QnA, Pages, Languages, Notifications, Theme, Backup, Activity Log, Trash; Music + API in public 3-dot menu
 - [ ] Database Backup ZIP + System Health / reconcile; README restore steps
 - [ ] Notifications, popups, maintenance mode, reseller API, languages, music, Telegram alerts, captcha
