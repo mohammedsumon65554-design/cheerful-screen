@@ -14,16 +14,593 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_credentials: {
+        Row: {
+          id: number
+          password_hash: string
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          password_hash: string
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          password_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      admin_log: {
+        Row: {
+          action: string
+          created_at: string
+          detail: Json
+          id: number
+          ip: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          detail?: Json
+          id?: number
+          ip?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          detail?: Json
+          id?: number
+          ip?: string | null
+        }
+        Relationships: []
+      }
+      admin_login_attempts: {
+        Row: {
+          created_at: string
+          id: number
+          ip: string | null
+          key: string
+          success: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          ip?: string | null
+          key: string
+          success: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          ip?: string | null
+          key?: string
+          success?: boolean
+        }
+        Relationships: []
+      }
+      admin_sessions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          ip: string | null
+          last_seen: string
+          revoked: boolean
+          token_hash: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          ip?: string | null
+          last_seen?: string
+          revoked?: boolean
+          token_hash: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          ip?: string | null
+          last_seen?: string
+          revoked?: boolean
+          token_hash?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          active: boolean
+          deleted_at: string | null
+          id: string
+          name: string
+          platform_id: string
+          sort: number
+        }
+        Insert: {
+          active?: boolean
+          deleted_at?: string | null
+          id?: string
+          name: string
+          platform_id: string
+          sort?: number
+        }
+        Update: {
+          active?: boolean
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          platform_id?: string
+          sort?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "categories_platform_id_fkey"
+            columns: ["platform_id"]
+            isOneToOne: false
+            referencedRelation: "platforms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deposits: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          bdt_amount: number | null
+          bdt_rate: number | null
+          code: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          idempotency_key: string
+          method_id: string
+          method_kind: Database["public"]["Enums"]["pm_kind"]
+          method_name: string
+          screenshot_path: string | null
+          status: Database["public"]["Enums"]["deposit_status"]
+          txn_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount: number
+          bdt_amount?: number | null
+          bdt_rate?: number | null
+          code: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          idempotency_key: string
+          method_id: string
+          method_kind: Database["public"]["Enums"]["pm_kind"]
+          method_name: string
+          screenshot_path?: string | null
+          status?: Database["public"]["Enums"]["deposit_status"]
+          txn_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          bdt_amount?: number | null
+          bdt_rate?: number | null
+          code?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          idempotency_key?: string
+          method_id?: string
+          method_kind?: Database["public"]["Enums"]["pm_kind"]
+          method_name?: string
+          screenshot_path?: string | null
+          status?: Database["public"]["Enums"]["deposit_status"]
+          txn_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deposits_method_id_fkey"
+            columns: ["method_id"]
+            isOneToOne: false
+            referencedRelation: "payment_methods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          admin_note: string | null
+          category_name: string
+          charge: number
+          created_at: string
+          deleted_at: string | null
+          delivered_qty: number | null
+          id: string
+          idempotency_key: string
+          link: string
+          order_code: string
+          platform_name: string
+          platform_slug: string
+          quantity: number
+          refunded: number
+          service_id: string
+          service_name: string
+          status: Database["public"]["Enums"]["order_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          category_name: string
+          charge: number
+          created_at?: string
+          deleted_at?: string | null
+          delivered_qty?: number | null
+          id?: string
+          idempotency_key: string
+          link: string
+          order_code: string
+          platform_name: string
+          platform_slug: string
+          quantity: number
+          refunded?: number
+          service_id: string
+          service_name: string
+          status?: Database["public"]["Enums"]["order_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          category_name?: string
+          charge?: number
+          created_at?: string
+          deleted_at?: string | null
+          delivered_qty?: number | null
+          id?: string
+          idempotency_key?: string
+          link?: string
+          order_code?: string
+          platform_name?: string
+          platform_slug?: string
+          quantity?: number
+          refunded?: number
+          service_id?: string
+          service_name?: string
+          status?: Database["public"]["Enums"]["order_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_methods: {
+        Row: {
+          account: string
+          account_type: string | null
+          active: boolean
+          deleted_at: string | null
+          id: string
+          instructions: string | null
+          kind: Database["public"]["Enums"]["pm_kind"]
+          logo_url: string | null
+          max_amount: number
+          min_amount: number
+          name: string
+          network: string | null
+          sort: number
+        }
+        Insert: {
+          account: string
+          account_type?: string | null
+          active?: boolean
+          deleted_at?: string | null
+          id?: string
+          instructions?: string | null
+          kind: Database["public"]["Enums"]["pm_kind"]
+          logo_url?: string | null
+          max_amount?: number
+          min_amount?: number
+          name: string
+          network?: string | null
+          sort?: number
+        }
+        Update: {
+          account?: string
+          account_type?: string | null
+          active?: boolean
+          deleted_at?: string | null
+          id?: string
+          instructions?: string | null
+          kind?: Database["public"]["Enums"]["pm_kind"]
+          logo_url?: string | null
+          max_amount?: number
+          min_amount?: number
+          name?: string
+          network?: string | null
+          sort?: number
+        }
+        Relationships: []
+      }
+      platforms: {
+        Row: {
+          active: boolean
+          deleted_at: string | null
+          id: string
+          name: string
+          slug: string
+          sort: number
+        }
+        Insert: {
+          active?: boolean
+          deleted_at?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort?: number
+        }
+        Update: {
+          active?: boolean
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          accepted_terms_at: string | null
+          avatar_url: string | null
+          balance: number
+          banned: boolean
+          created_at: string
+          deleted_at: string | null
+          email: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          public_id: string
+          username: string
+        }
+        Insert: {
+          accepted_terms_at?: string | null
+          avatar_url?: string | null
+          balance?: number
+          banned?: boolean
+          created_at?: string
+          deleted_at?: string | null
+          email?: string | null
+          full_name?: string
+          id: string
+          phone?: string | null
+          public_id: string
+          username: string
+        }
+        Update: {
+          accepted_terms_at?: string | null
+          avatar_url?: string | null
+          balance?: number
+          banned?: boolean
+          created_at?: string
+          deleted_at?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          public_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          active: boolean
+          avg_time: string
+          category_id: string
+          deleted_at: string | null
+          description: string | null
+          id: string
+          is_seed: boolean
+          max_qty: number
+          min_qty: number
+          name: string
+          rate: number
+          rate_per: number
+          refill_info: string | null
+          sort: number
+        }
+        Insert: {
+          active?: boolean
+          avg_time?: string
+          category_id: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_seed?: boolean
+          max_qty?: number
+          min_qty?: number
+          name: string
+          rate: number
+          rate_per?: number
+          refill_info?: string | null
+          sort?: number
+        }
+        Update: {
+          active?: boolean
+          avg_time?: string
+          category_id?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_seed?: boolean
+          max_qty?: number
+          min_qty?: number
+          name?: string
+          rate?: number
+          rate_per?: number
+          refill_info?: string | null
+          sort?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          allow_orders: boolean
+          announcement_on: boolean
+          announcement_text: string | null
+          bdt_rate: number
+          email: string | null
+          hero_text: string
+          hero_title: string
+          id: number
+          require_verified_email: boolean
+          site_name: string
+          telegram: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          allow_orders?: boolean
+          announcement_on?: boolean
+          announcement_text?: string | null
+          bdt_rate?: number
+          email?: string | null
+          hero_text?: string
+          hero_title?: string
+          id?: number
+          require_verified_email?: boolean
+          site_name?: string
+          telegram?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          allow_orders?: boolean
+          announcement_on?: boolean
+          announcement_text?: string | null
+          bdt_rate?: number
+          email?: string | null
+          hero_text?: string
+          hero_title?: string
+          id?: number
+          require_verified_email?: boolean
+          site_name?: string
+          telegram?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_ledger: {
+        Row: {
+          amount: number
+          balance_after: number
+          created_at: string
+          id: number
+          kind: string
+          ref: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          balance_after: number
+          created_at?: string
+          id?: never
+          kind: string
+          ref?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          created_at?: string
+          id?: never
+          kind?: string
+          ref?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cancel_my_order: { Args: { _order_id: string }; Returns: undefined }
+      create_deposit: {
+        Args: {
+          _amount: number
+          _idem: string
+          _method_id: string
+          _screenshot: string
+          _txn: string
+        }
+        Returns: Json
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      place_order: {
+        Args: {
+          _idem: string
+          _link: string
+          _quantity: number
+          _service_id: string
+        }
+        Returns: Json
+      }
+      set_my_avatar: { Args: { _path: string }; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      deposit_status: "pending" | "approved" | "rejected" | "cancelled"
+      order_status:
+        | "pending"
+        | "processing"
+        | "completed"
+        | "partial"
+        | "rejected"
+        | "canceled"
+      pm_kind: "binance" | "usdt" | "p2p"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +727,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      deposit_status: ["pending", "approved", "rejected", "cancelled"],
+      order_status: [
+        "pending",
+        "processing",
+        "completed",
+        "partial",
+        "rejected",
+        "canceled",
+      ],
+      pm_kind: ["binance", "usdt", "p2p"],
+    },
   },
 } as const
