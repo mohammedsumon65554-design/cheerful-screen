@@ -26,6 +26,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedAddFundsIndexRouteImport } from './routes/_authenticated/add-funds.index'
 import { Route as AuthenticatedAddFundsHistoryRouteImport } from './routes/_authenticated/add-funds.history'
 import { Route as AuthenticatedServicePlatformRouteImport } from './routes/_authenticated/service.$platform'
+import { Route as ApiPublicV2RouteImport } from './routes/api/public/v2'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -114,6 +115,11 @@ const AuthenticatedServicePlatformRoute =
     path: '/service/$platform',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicV2Route = ApiPublicV2RouteImport.update({
+  id: '/api/public/v2',
+  path: '/api/public/v2',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/add-funds/history': typeof AuthenticatedAddFundsHistoryRoute
   '/service/$platform': typeof AuthenticatedServicePlatformRoute
+  '/api/public/v2': typeof ApiPublicV2Route
   '/add-funds/': typeof AuthenticatedAddFundsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/add-funds/history': typeof AuthenticatedAddFundsHistoryRoute
   '/service/$platform': typeof AuthenticatedServicePlatformRoute
+  '/api/public/v2': typeof ApiPublicV2Route
   '/add-funds': typeof AuthenticatedAddFundsIndexRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/add-funds/history': typeof AuthenticatedAddFundsHistoryRoute
   '/_authenticated/service/$platform': typeof AuthenticatedServicePlatformRoute
+  '/api/public/v2': typeof ApiPublicV2Route
   '/_authenticated/add-funds/': typeof AuthenticatedAddFundsIndexRoute
 }
 export interface FileRouteTypes {
@@ -189,6 +198,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/add-funds/history'
     | '/service/$platform'
+    | '/api/public/v2'
     | '/add-funds/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/add-funds/history'
     | '/service/$platform'
+    | '/api/public/v2'
     | '/add-funds'
   id:
     | '__root__'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/add-funds/history'
     | '/_authenticated/service/$platform'
+    | '/api/public/v2'
     | '/_authenticated/add-funds/'
   fileRoutesById: FileRoutesById
 }
@@ -241,6 +253,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  ApiPublicV2Route: typeof ApiPublicV2Route
 }
 
 declare module '@tanstack/react-router' {
@@ -364,6 +377,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedServicePlatformRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/v2': {
+      id: '/api/public/v2'
+      path: '/api/public/v2'
+      fullPath: '/api/public/v2'
+      preLoaderRoute: typeof ApiPublicV2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -400,6 +420,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  ApiPublicV2Route: ApiPublicV2Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
