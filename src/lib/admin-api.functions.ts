@@ -33,7 +33,7 @@ export const adminSetOrderStatus = createServerFn({ method: "POST" })
   }).parse(d))
   .handler(async ({ data }) => {
     const { s, db } = await adm();
-    const { data: r, error } = await db.rpc("admin_set_order_status", { _order: data.id, _status: data.status, _delivered: data.delivered ?? undefined, _note: data.note ?? undefined });
+    const { data: r, error } = await db.rpc("admin_set_order_status", { _order: data.id, _status: data.status, ...(data.delivered != null ? { _delivered: data.delivered } : {}), ...(data.note ? { _note: data.note } : {}) });
     if (error) {
       const msg = error.message.includes("ORDER_FINAL") ? "This order is already closed and refunded." : error.message.includes("BAD_DELIVERED") ? "Delivered amount must be between 0 and less than the quantity." : "Could not update order";
       return { ok: false as const, error: msg };
