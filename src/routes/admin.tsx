@@ -16,6 +16,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { AdminUsers } from "@/components/admin/AdminUsers";
 import { AdminUserDetail } from "@/components/admin/AdminUserDetail";
+import { AdminApi } from "@/components/admin/AdminApi";
+import { AdminMusic } from "@/components/admin/AdminMusic";
 
 const search = z.object({
   section: z.string().optional(),
@@ -46,8 +48,8 @@ const NAV = [
   { id: "orders", label: "Orders", icon: ShoppingCart },
   { id: "add-funds", label: "Add Funds", icon: PlusCircle },
   { id: "services", label: "Services", icon: Package },
-  { id: "api", label: "API (Reseller)", icon: Code2 },
-  { id: "music", label: "Music", icon: Music },
+  { id: "api", label: "API (Reseller)", icon: Code2, ready: true },
+  { id: "music", label: "Music", icon: Music, ready: true },
   { id: "content", label: "Website Content & Labels", icon: Type },
   { id: "menu", label: "Menu & Navigation", icon: MenuIcon },
   { id: "home", label: "Home Page", icon: Home },
@@ -139,6 +141,8 @@ function AdminLayout() {
         {section === "users" && user ? <AdminUserDetail id={user} onBack={() => navigate({ search: { section: "users", q } })} />
           : section === "users" ? <AdminUsers initialQ={q ?? ""} onOpen={(id) => navigate({ search: { section: "users", user: id, q } })} />
           : section === "settings" ? <SettingsSection />
+          : section === "api" ? <AdminApi />
+          : section === "music" ? <AdminMusic />
           : <AdminDashboard onGo={pick} />}
       </div>
     </div>
