@@ -739,6 +739,15 @@ export type Database = {
         Args: { _amount: number; _note: string; _user: string }
         Returns: number
       }
+      admin_set_order_status: {
+        Args: {
+          _delivered?: number
+          _note?: string
+          _order: string
+          _status: Database["public"]["Enums"]["order_status"]
+        }
+        Returns: Json
+      }
       api_place_order: {
         Args: {
           _link: string
